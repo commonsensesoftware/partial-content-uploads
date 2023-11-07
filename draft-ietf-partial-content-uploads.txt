@@ -131,13 +131,9 @@ Table of Contents
 
 1.2.  Syntax Notation
 
-2.  New Partial Content Transfer
+   {::boilerplate std68}
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
+2.  New Partial Content Transfer
 
    The POST method MUST be used to indicate that the client intends to
    start a new partial content transfer.  The client MUST send the
@@ -171,12 +167,6 @@ Table of Contents
 
 2.1.  The Content-Disposition Header Field
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    Content-Disposition is a REQUIRED header field.  In its absence, the
    origin server MUST respond with 400 (Bad Request).  This header field
    indicates that the origin server should create a new storage resource
@@ -184,24 +174,12 @@ Table of Contents
 
 2.1.1.  The Create Disposition Type
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    The disposition type 'create' is REQUIRED and is meant to instruct
    the origin server that it should pre-allocate the required storage
    space, but the request itself does not contain a body that is to be
    written to storage.
 
 2.1.2.  Disposition Parameter: 'Size'
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    The size parameter is REQUIRED and has the same meaning as defined in
    Section 2.7 of [RFC2183].  The origin server MUST use this value as
@@ -213,12 +191,6 @@ Table of Contents
 
 2.1.3.  Disposition Parameter: 'Filename'
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    The "filename" and "filename*" parameters are OPTIONAL parameters
    that have the same meaning defined in Section 4.3 of [RFC6266].  When
    specified by a client, the origin server MAY use the specified file
@@ -226,24 +198,12 @@ Table of Contents
 
 2.1.4.  Disposition Parameter: 'Modification-Date'
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    The modification-date parameter is OPTIONAL and has the same meaning
    as defined in Section 2.5 of [RFC2183].  When the client does not
    specify the modification-date parameter, the current date and time on
    the origin server MAY be used if the server has a clock.
 
 2.2.  Resource Contention
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    It is possible that multiple clients MAY request an origin server
    provision storage for the same resource.  An origin server SHOULD use
@@ -265,12 +225,6 @@ Table of Contents
 
 2.3.  Entity Tags
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    Upon successful allocation of the required storage space, the origin
    server MUST return an entity tag in the response.  The entity tag
    MUST be used for all subsequent requests, including canceling the
@@ -278,12 +232,6 @@ Table of Contents
    SHOULD use strong validation.
 
 2.4.  Resource Retrieval
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    An origin server which supports partial content uploads MAY also
    support requesting that same resource for downloads.  An origin
@@ -294,12 +242,6 @@ Table of Contents
    resource that has not been completely transferred.
 
 2.5.  Example
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    Here is an example of a POST request to initiate a new partial
    content transfer:
@@ -313,12 +255,6 @@ Table of Contents
    Sunset: Mon, 13 Nov 2023 00:00:00 GMT
 
 3.  Update Partial Content Transfer
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    The PATCH method MUST be used to update partial content.  Unlike
    other uses of PATCH, an origin server MUST complete this operation
@@ -336,12 +272,6 @@ Table of Contents
 
 3.1.  Content-Range Header Field
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    Content-Range is a REQUIRED header field that has the same meaning as
    defined in Section 4.2 of [RFC7233].  The Content-Range header field
    informs the origin server what part of the content is being
@@ -357,12 +287,6 @@ Table of Contents
 
 3.2.  Last-Modified Header Field
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    Last-Modified is an OPTIONAL header field and has the same meaning as
    defined in Section 2.2 of [RFC7232].  If the modification-date
    parameter was specified in the Content-Disposition header field as
@@ -376,12 +300,6 @@ Table of Contents
 
 3.3.  If-Match Header Field
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    If-Match is a REQUIRED header field.  The If-Match header field MUST
    contain the entity tag returned by the origin server when the partial
    content transfer was started.  If a client does not specify the If-
@@ -392,12 +310,6 @@ Table of Contents
 
 3.4.  Expect Header Field
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    Expect is an OPTIONAL header field and has the same meaning as
    defined in Section 5.1.1 of [RFC7231].  Partial content uploads can
    still be large.  Clients SHOULD send the 100-Continue expectation to
@@ -407,12 +319,6 @@ Table of Contents
    (Entity Too Large).
 
 3.5.  Resource Contention
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    It is possible that multiple clients MAY request that an origin
    server update a partial content transfer for the same resource.
@@ -438,12 +344,6 @@ Table of Contents
    is at the discretion of the server.
 
 3.6.  Completing the Transfer
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    To complete a transfer, a client MUST send all the corresponding
    content ranges.  A client MAY vary the size of each transfer; for
@@ -475,12 +375,6 @@ Table of Contents
 
 4.  Cancel Partial Content Transfer
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    The DELETE method MUST be used to cancel a partial content transfer.
    When a client requests that a partial content transfer be canceled,
    the server MUST deallocate the storage previously provisioned for the
@@ -493,12 +387,6 @@ Table of Contents
 
 4.1.  If-Match Header Field
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    If-Match is a REQUIRED header field.  The If-Match header field MUST
    contain the entity tag returned by the origin server when the partial
    content transfer was started.  If a client does not specify the If-
@@ -508,12 +396,6 @@ Table of Contents
    (Precondition Failed).
 
 4.2.  Resource Contention
-
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
 
    It is possible that multiple clients MAY request that an origin
    server cancel a partial content transfer for the same resource.  If
