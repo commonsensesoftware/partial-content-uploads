@@ -66,6 +66,8 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction
+     1.1.  Terminology
+     1.2.  Syntax Notation
    2.  New Partial Content Transfer
      2.1.  The Content-Disposition Header Field
        2.1.1.  The Create Disposition Type
@@ -98,12 +100,6 @@ Table of Contents
 
 1.  Introduction
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-   "OPTIONAL" in this document are to be interpreted as described in
-   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
-
    Hypertext Transfer Protocol (HTTP) clients often encounter
    interrupted data transfers because of canceled requests or dropped
    connections.  RFC 7233 defines HTTP range requests and partial
@@ -120,7 +116,7 @@ Table of Contents
    extensible range types, this specification only defines requests for
    byte ranges.
 
-   Terminology {#terminology}
+1.1.  Terminology
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
@@ -133,7 +129,7 @@ Table of Contents
    servers).  An implementation is considered conformant if it complies
    with all the requirements associated with its role.
 
-      Syntax Notation
+1.2.  Syntax Notation
 
 2.  New Partial Content Transfer
 
