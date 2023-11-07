@@ -131,7 +131,11 @@ Table of Contents
 
 1.2.  Syntax Notation
 
-   {::boilerplate std68}
+   This specification uses the Augmented Backus-Naur Form (ABNF)
+   notation of [RFC5234] with a list extension, defined in Section 7 of
+   [RFC7230], that allows for compact definition of comma-separated
+   lists using a '#' operator (similar to how the '*' operator indicates
+   repetition).
 
 2.  New Partial Content Transfer
 
@@ -438,6 +442,11 @@ Table of Contents
               Content-Disposition Header Field", RFC 2183,
               DOI 10.17487/RFC2183, August 1997,
               <https://www.rfc-editor.org/rfc/rfc2183>.
+
+   [RFC5234]  Crocker, D., Ed. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234,
+              DOI 10.17487/RFC5234, January 2008,
+              <https://www.rfc-editor.org/rfc/rfc5234>.
 
    [RFC6266]  Reschke, J., "Use of the Content-Disposition Header Field
               in the Hypertext Transfer Protocol (HTTP)", RFC 6266,
