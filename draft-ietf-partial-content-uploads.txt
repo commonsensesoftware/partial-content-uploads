@@ -102,14 +102,14 @@ Table of Contents
 
    Hypertext Transfer Protocol (HTTP) clients often encounter
    interrupted data transfers because of canceled requests or dropped
-   connections.  RFC 7233 defines HTTP range requests and partial
+   connections.  RFC 9110 defines HTTP range requests and partial
    responses, but it only describes how a client can transfer data from
    a server (e.g. download).
 
    This document defines a reciprocal set of HTTP range requests and
    responses that a client can use to transfer data to a server (e.g.
    upload).  Where appropriate, this document will use existing range
-   units and header fields defined in [RFC7233], [RFC6266], and
+   units and header fields defined in [RFC9110], [RFC6266], and
    [RFC2183].
 
    Although the range request mechanism is designed to allow for
@@ -132,8 +132,8 @@ Table of Contents
 1.2.  Syntax Notation
 
    This specification uses the Augmented Backus-Naur Form (ABNF)
-   notation of [RFC5234] with a list extension, defined in Section 7 of
-   [RFC7230], that allows for compact definition of comma-separated
+   notation of [RFC5234] with a list extension, defined in Section 2.1
+   of [RFC9110], that allows for compact definition of comma-separated
    lists using a '#' operator (similar to how the '*' operator indicates
    repetition).
 
@@ -202,7 +202,7 @@ Table of Contents
    that such a response include problem details as defined in [RFC7807]
    which explains why the content cannot be allocated and includes the
    maximum allowable size.  For example, if the requested size is too
-   large, the server could respond with:
+   large, the server MAY respond with:
 
    HTTP/1.1 400 Bad Request
    Content-Type: application/problem+json
@@ -223,7 +223,8 @@ Table of Contents
    The "filename" and "filename*" parameters are OPTIONAL parameters
    that have the same meaning defined in Section 4.3 of [RFC6266].  When
    specified by a client, the origin server MAY use the specified file
-   name in lieu of the resource identifier derived from the request URL.
+   name in lieu of the resource identifier that it elects to generate,
+   which MAY also derive from the request URL.
 
 2.1.4.  Disposition Parameter: 'Modification-Date'
 
@@ -243,7 +244,7 @@ Table of Contents
    is unable to fulfill the request because the resource cannot be
    provisioned, it MUST respond with 409 (Conflict) to which a client
    MAY retry the request.  A server MAY also return the Retry-After
-   header field as defined in Section 7.1.3 of [RFC7231] to provide a
+   header field as defined in Section 10.2.3 of [RFC9110] to provide a
    hint to the client as to how long it should wait before retrying the
    request.
 
@@ -293,16 +294,21 @@ Table of Contents
    idempotently.  This behavior is true even if multiple client requests
    occur concurrently or overlap in content range.
 
-   If the origin server successfully updates the specified content
-   range, then it MUST respond with 204 (No Content).  If the Content-
-   Disposition header field contained the modification-date parameter,
-   then the origin server MUST also return this value in the response
-   Last-Modified header field.
+   If the origin server successfully updates the specified content range
+   and more content is expected, then it MUST respond with 204 (No
+   Content).  If the origin server determines no further content is
+   expected, then it MUST respond with 201 (Created) and Content-
+   Location.  Content-Location indicates the URL where the client can
+   retrieve the resource with a GET request, which MAY not previously be
+   known to the client.  If the Content-Disposition header field
+   contained the modification-date parameter, then the origin server
+   MUST also return this value in the response Last-Modified header
+   field.
 
 3.1.  Content-Range Header Field
 
    Content-Range is a REQUIRED header field that has the same meaning as
-   defined in Section 4.2 of [RFC7233].  The Content-Range header field
+   defined in Section 14.4 of [RFC9110].  The Content-Range header field
    informs the origin server what part of the content is being
    transferred.
 
@@ -317,7 +323,7 @@ Table of Contents
 3.2.  Last-Modified Header Field
 
    Last-Modified is an OPTIONAL header field and has the same meaning as
-   defined in Section 2.2 of [RFC7232].  If the modification-date
+   defined in Section 8.8.2 of [RFC9110].  If the modification-date
    parameter was specified in the Content-Disposition header field as
    part of the start of the partial content transfer, then the origin
    server MUST respond with the Last-Modified header field containing
@@ -340,7 +346,7 @@ Table of Contents
 3.4.  Expect Header Field
 
    Expect is an OPTIONAL header field and has the same meaning as
-   defined in Section 5.1.1 of [RFC7231].  Partial content uploads can
+   defined in Section 10.1.1 of [RFC9110].  Partial content uploads can
    still be large.  Clients SHOULD send the 100-Continue expectation to
    ensure the server is willing to accept the size of the content being
    sent.  If the client sends more partial content than the server is
@@ -357,8 +363,8 @@ Table of Contents
    unable to fulfill the request because the resource is inaccessible,
    it MUST respond with 409 (Conflict).  Since the request MUST be
    idempotent, a client MAY retry a 409 error response.  A server MAY
-   also return the Retry-After header field as defined in Section 7.1.3
-   of [RFC7231] to provide a hint to the client as to how long it should
+   also return the Retry-After header field as defined in Section 10.2.3
+   of [RFC9110] to provide a hint to the client as to how long it should
    wait before retrying the request.
 
    If the server is unable to fulfill the request because the allocated
@@ -386,8 +392,9 @@ Table of Contents
    store the start and end position of each content range received in
    external storage such as a file or database.  The exact mechanism
    used to implement this behavior is at the discretion of the server.
-   Once the server has made the decision that all the content has been
-   transferred, it MAY allow access to the resource via the GET method.
+   Once the server has made the decision that all of the content has
+   been transferred, it MAY allow access to the resource via the GET
+   method that is indicated in Content-Location.
 
 3.7.  Example
 
@@ -409,7 +416,7 @@ Table of Contents
    the server MUST deallocate the storage previously provisioned for the
    transfer.
 
-   Only the client originator can cancel the content transfer.  The same
+   Only the client originator MAY cancel the content transfer.  The same
    client or a new client MAY begin a new partial content transfer
    before the existing transfer is complete.  Starting a new partial
    content transfer intrinsically cancels any existing transfer.
@@ -432,7 +439,7 @@ Table of Contents
    inaccessible, it MUST respond with 409 (Conflict).  Since the request
    MUST be idempotent, a client MAY retry a 409 error response.  A
    server MAY also return the Retry-After header field as defined in
-   Section 7.1.3 of [RFC7231] to provide a hint to the client as to how
+   Section 10.2.3 of [RFC9110] to provide a hint to the client as to how
    long it should wait before retrying the request.
 
    If the server is unable to fulfill the request because the allocated
@@ -448,11 +455,11 @@ Table of Contents
 5.  Security Considerations
 
    This document has the same security considerations that are outlined
-   in Section 5 of [RFC2183].  There are additional risks from clients
-   requesting unintentionally large resources.  Section 2 and Section 3
-   describe the validation process and how to reject such a request.
-   The maximum sizes allowed, in whole or in part, are at the discretion
-   of the origin server.
+   in Section 5 of [RFC2183] and Section 7 of [RFC6266].  There are
+   additional risks from clients requesting unintentionally large
+   resources.  Section 2 and Section 3 describe the validation process
+   and how to reject such a request.  The maximum sizes allowed, in
+   whole or in part, are at the discretion of the origin server.
 
    While this document mandates that entity tags be used in requests, it
    does not dictate the format or content of those values.  An origin
@@ -502,26 +509,6 @@ Table of Contents
               DOI 10.17487/RFC6266, June 2011,
               <https://www.rfc-editor.org/rfc/rfc6266>.
 
-   [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Message Syntax and Routing",
-              RFC 7230, DOI 10.17487/RFC7230, June 2014,
-              <https://www.rfc-editor.org/rfc/rfc7230>.
-
-   [RFC7231]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Semantics and Content", RFC 7231,
-              DOI 10.17487/RFC7231, June 2014,
-              <https://www.rfc-editor.org/rfc/rfc7231>.
-
-   [RFC7232]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Conditional Requests", RFC 7232,
-              DOI 10.17487/RFC7232, June 2014,
-              <https://www.rfc-editor.org/rfc/rfc7232>.
-
-   [RFC7233]  Fielding, R., Ed., Lafon, Y., Ed., and J. Reschke, Ed.,
-              "Hypertext Transfer Protocol (HTTP/1.1): Range Requests",
-              RFC 7233, DOI 10.17487/RFC7233, June 2014,
-              <https://www.rfc-editor.org/rfc/rfc7233>.
-
    [RFC7630]  Merkle, J., Ed. and M. Lochter, "HMAC-SHA-2 Authentication
               Protocols in the User-based Security Model (USM) for
               SNMPv3", RFC 7630, DOI 10.17487/RFC7630, October 2015,
@@ -544,6 +531,11 @@ Table of Contents
               DOI 10.17487/RFC8594, May 2019,
               <https://www.rfc-editor.org/rfc/rfc8594>.
 
+   [RFC9110]  Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke,
+              Ed., "HTTP Semantics", STD 97, RFC 9110,
+              DOI 10.17487/RFC9110, June 2022,
+              <https://www.rfc-editor.org/rfc/rfc9110>.
+
 7.2.  Informative References
 
    [XHR]      van Kesteren, A., "XMLHttpRequest, Living Standard",
@@ -555,7 +547,7 @@ Appendix A.  Content-Disposition Versus Content-Length
    is the most appropriate header field to indicate the size of the
    intended content being transferred.  As Section 3 of [RFC7631]
    indicates, a 'representation' can be anything.  In this document, the
-   'representation' would be the allocated storage for the content
+   "representation" would be the allocated storage for the content
    transfer, such as a file.
 
    The client scripting engines of modern browsers use the

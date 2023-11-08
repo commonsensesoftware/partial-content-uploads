@@ -1239,8 +1239,8 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">Hypertext Transfer Protocol (HTTP) clients often encounter interrupted data transfers because of canceled requests or dropped connections. RFC 7233 defines HTTP range requests and partial responses, but it only describes how a client can transfer data from a server (e.g. download).<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">This document defines a reciprocal set of HTTP range requests and responses that a client can use to transfer data to a server (e.g. upload). Where appropriate, this document will use existing range units and header fields defined in <span>[<a href="#RFC7233" class="cite xref">RFC7233</a>]</span>, <span>[<a href="#RFC6266" class="cite xref">RFC6266</a>]</span>, and <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-1">Hypertext Transfer Protocol (HTTP) clients often encounter interrupted data transfers because of canceled requests or dropped connections. RFC 9110 defines HTTP range requests and partial responses, but it only describes how a client can transfer data from a server (e.g. download).<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document defines a reciprocal set of HTTP range requests and responses that a client can use to transfer data to a server (e.g. upload). Where appropriate, this document will use existing range units and header fields defined in <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>, <span>[<a href="#RFC6266" class="cite xref">RFC6266</a>]</span>, and <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Although the range request mechanism is designed to allow for extensible range types, this specification only defines requests for byte ranges.<a href="#section-1-3" class="pilcrow">¶</a></p>
 <div id="terminology">
 <section id="section-1.1">
@@ -1260,7 +1260,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
         <h3 id="name-syntax-notation">
 <a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-syntax-notation" class="section-name selfRef">Syntax Notation</a>
         </h3>
-<p id="section-1.2-1">This specification uses the Augmented Backus-Naur Form (ABNF) notation of <span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span> with a list extension, defined in Section 7 of <span>[<a href="#RFC7230" class="cite xref">RFC7230</a>]</span>, that allows for compact definition of comma-separated lists using a '#' operator (similar to how the '*' operator indicates repetition).<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-1">This specification uses the Augmented Backus-Naur Form (ABNF) notation of <span>[<a href="#RFC5234" class="cite xref">RFC5234</a>]</span> with a list extension, defined in Section 2.1 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>, that allows for compact definition of comma-separated lists using a '#' operator (similar to how the '*' operator indicates repetition).<a href="#section-1.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1297,7 +1297,7 @@ client's expectation that the disposition of the origin server is to create a re
 <p id="section-2.1.2-1">The size parameter is REQUIRED and has the same meaning as defined in Section 2.7 of <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span>. The origin server MUST use this value as the amount of storage to allocate in octets.<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.1.2-2">If a client does not provide the size parameter or the size is equal to or less than zero, the origin server MUST respond with 411 (Length Required). If the origin server refuses to allocate the requested storage, it MUST
 respond with 400 (Bad Request). It is RECOMMENDED that such a response include problem details as defined in <span>[<a href="#RFC7807" class="cite xref">RFC7807</a>]</span> which explains why the content cannot be allocated and includes the maximum allowable size. For example,
-if the requested size is too large, the server could respond with:<a href="#section-2.1.2-2" class="pilcrow">¶</a></p>
+if the requested size is too large, the server MAY respond with:<a href="#section-2.1.2-2" class="pilcrow">¶</a></p>
 <div class="lang-http sourcecode" id="section-2.1.2-3">
 <pre>
 HTTP/1.1 400 Bad Request
@@ -1322,7 +1322,7 @@ Content-Language: en
           <h4 id="name-disposition-parameter-filen">
 <a href="#section-2.1.3" class="section-number selfRef">2.1.3. </a><a href="#name-disposition-parameter-filen" class="section-name selfRef">Disposition Parameter: 'Filename'</a>
           </h4>
-<p id="section-2.1.3-1">The "filename" and "filename*" parameters are OPTIONAL parameters that have the same meaning defined in Section 4.3 of <span>[<a href="#RFC6266" class="cite xref">RFC6266</a>]</span>. When specified by a client, the origin server MAY use the specified file name in lieu of the resource identifier derived from the request URL.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.3-1">The "filename" and "filename*" parameters are OPTIONAL parameters that have the same meaning defined in Section 4.3 of <span>[<a href="#RFC6266" class="cite xref">RFC6266</a>]</span>. When specified by a client, the origin server MAY use the specified file name in lieu of the resource identifier that it elects to generate, which MAY also derive from the request URL.<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="disposition-parameter-modification-date">
@@ -1340,7 +1340,7 @@ Content-Language: en
         <h3 id="name-resource-contention">
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-resource-contention" class="section-name selfRef">Resource Contention</a>
         </h3>
-<p id="section-2.2-1">It is possible that multiple clients MAY request an origin server provision storage for the same resource. An origin server SHOULD use optimistic behavior such that the last successful client request is the owner of the remaining transfer requests. The entity tag returned by the origin server in the response provides the correlation to all other requests for a given client. If the server is unable to fulfill the request because the resource cannot be provisioned, it MUST respond with 409 (Conflict) to which a client MAY retry the request. A server MAY also return the Retry-After header field as defined in Section 7.1.3 of <span>[<a href="#RFC7231" class="cite xref">RFC7231</a>]</span> to provide a hint to the client as to how long it should wait before retrying the request.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">It is possible that multiple clients MAY request an origin server provision storage for the same resource. An origin server SHOULD use optimistic behavior such that the last successful client request is the owner of the remaining transfer requests. The entity tag returned by the origin server in the response provides the correlation to all other requests for a given client. If the server is unable to fulfill the request because the resource cannot be provisioned, it MUST respond with 409 (Conflict) to which a client MAY retry the request. A server MAY also return the Retry-After header field as defined in Section 10.2.3 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span> to provide a hint to the client as to how long it should wait before retrying the request.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <p id="section-2.2-2">It is NOT RECOMMENDED that origin servers employ a stateful locking strategy as it could result in a condition by which no client is able to create the requested resource. This document does not describe how to lock or unlock such a resource.<a href="#section-2.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1389,13 +1389,13 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-update-partial-content-tran" class="section-name selfRef">Update Partial Content Transfer</a>
       </h2>
 <p id="section-3-1">The PATCH method MUST be used to update partial content. Unlike other uses of PATCH, an origin server MUST complete this operation idempotently. Given the entity tag provided by the client and the fact that the required storage space has already been allocated, the origin server has enough information to safely fulfill the request idempotently. This behavior is true even if multiple client requests occur concurrently or overlap in content range.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">If the origin server successfully updates the specified content range, then it MUST respond with 204 (No Content). If the Content-Disposition header field contained the modification-date parameter, then the origin server MUST also return this value in the response Last-Modified header field.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">If the origin server successfully updates the specified content range and more content is expected, then it MUST respond with 204 (No Content). If the origin server determines no further content is expected, then it MUST respond with 201 (Created) and Content-Location. Content-Location indicates the URL where the client can retrieve the resource with a GET request, which MAY not previously be known to the client. If the Content-Disposition header field contained the modification-date parameter, then the origin server MUST also return this value in the response Last-Modified header field.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="content-range-header-field">
 <section id="section-3.1">
         <h3 id="name-content-range-header-field">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-content-range-header-field" class="section-name selfRef">Content-Range Header Field</a>
         </h3>
-<p id="section-3.1-1">Content-Range is a REQUIRED header field that has the same meaning as defined in Section 4.2 of <span>[<a href="#RFC7233" class="cite xref">RFC7233</a>]</span>. The Content-Range header field informs the origin server what part of the content is being transferred.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">Content-Range is a REQUIRED header field that has the same meaning as defined in Section 14.4 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. The Content-Range header field informs the origin server what part of the content is being transferred.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 <p id="section-3.1-2">If the byte-range in Content-Range is invalid or the complete-length does not match the provisioned storage amount defined by the size parameter in the Content-Disposition header field when the partial content transfer was started, the server MUST respond with 416 (Range Not Satisfiable). A client SHOULD inspect the complete-length of the Content-Range header field in the error response to determine whether the source content has been modified.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1404,7 +1404,7 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
         <h3 id="name-last-modified-header-field">
 <a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-last-modified-header-field" class="section-name selfRef">Last-Modified Header Field</a>
         </h3>
-<p id="section-3.2-1">Last-Modified is an OPTIONAL header field and has the same meaning as defined in Section 2.2 of <span>[<a href="#RFC7232" class="cite xref">RFC7232</a>]</span>. If the modification-date parameter was specified in the Content-Disposition header field as part of the start of the partial content transfer, then the origin server MUST respond with the Last-Modified header field containing the same value.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-1">Last-Modified is an OPTIONAL header field and has the same meaning as defined in Section 8.8.2 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. If the modification-date parameter was specified in the Content-Disposition header field as part of the start of the partial content transfer, then the origin server MUST respond with the Last-Modified header field containing the same value.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
 <p id="section-3.2-2">A client MAY use the Last-Modified header field to determine whether its copy of the content being transferred is still the same as the copy the origin server has.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1421,7 +1421,7 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
         <h3 id="name-expect-header-field">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-expect-header-field" class="section-name selfRef">Expect Header Field</a>
         </h3>
-<p id="section-3.4-1">Expect is an OPTIONAL header field and has the same meaning as defined in Section 5.1.1 of <span>[<a href="#RFC7231" class="cite xref">RFC7231</a>]</span>. Partial content uploads can still be large. Clients SHOULD send the 100-Continue expectation to ensure the server is willing to accept the size of the content being sent. If the client sends more partial content than the server is willing to accept in a single request, it MUST respond with 413 (Payload Too Large).<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">Expect is an OPTIONAL header field and has the same meaning as defined in Section 10.1.1 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. Partial content uploads can still be large. Clients SHOULD send the 100-Continue expectation to ensure the server is willing to accept the size of the content being sent. If the client sends more partial content than the server is willing to accept in a single request, it MUST respond with 413 (Payload Too Large).<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="resource-contention-1">
@@ -1429,7 +1429,7 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
         <h3 id="name-resource-contention-2">
 <a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-resource-contention-2" class="section-name selfRef">Resource Contention</a>
         </h3>
-<p id="section-3.5-1">It is possible that multiple clients MAY request that an origin server update a partial content transfer for the same resource. Provided that the If-Match header field contains a valid entity tag (<a href="#if-match-header" class="auto internal xref">Section 3.3</a>), an origin server SHOULD use an optimistic behavior when copying the transferred content to storage. If the server is unable to fulfill the request because the resource is inaccessible, it MUST respond with 409 (Conflict). Since the request MUST be idempotent, a client MAY retry a 409 error response. A server MAY also return the Retry-After header field as defined in Section 7.1.3 of <span>[<a href="#RFC7231" class="cite xref">RFC7231</a>]</span> to provide a hint to the client as to how long it should wait before retrying the request.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.5-1">It is possible that multiple clients MAY request that an origin server update a partial content transfer for the same resource. Provided that the If-Match header field contains a valid entity tag (<a href="#if-match-header" class="auto internal xref">Section 3.3</a>), an origin server SHOULD use an optimistic behavior when copying the transferred content to storage. If the server is unable to fulfill the request because the resource is inaccessible, it MUST respond with 409 (Conflict). Since the request MUST be idempotent, a client MAY retry a 409 error response. A server MAY also return the Retry-After header field as defined in Section 10.2.3 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span> to provide a hint to the client as to how long it should wait before retrying the request.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
 <p id="section-3.5-2">If the server is unable to fulfill the request because the allocated storage for the resource no longer exists, the server MUST respond with 410 (Gone).<a href="#section-3.5-2" class="pilcrow">¶</a></p>
 <p id="section-3.5-3">Retrying large content transfers can strain network resources and are likely to have high latency. If the origin server is aware that the storage resource is temporarily unavailable, it is RECOMMENDED that it automatically retry copying the transferred content. The number of times the server retries, or whether that server retries at all, is at the discretion of the server.<a href="#section-3.5-3" class="pilcrow">¶</a></p>
 </section>
@@ -1440,7 +1440,7 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
 <a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-completing-the-transfer" class="section-name selfRef">Completing the Transfer</a>
         </h3>
 <p id="section-3.6-1">To complete a transfer, a client MUST send all the corresponding content ranges. A client MAY vary the size of each transfer; for example, it may increase or decrease the content range based on available network bandwidth. A server knows that the transfer is complete when it has received transfers from a client that contain contiguous content ranges up to the size of the total content, potentially overlapping.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
-<p id="section-3.6-2">A server SHOULD NOT be stateful. A server, however, MAY choose to store the start and end position of each content range received in external storage such as a file or database. The exact mechanism used to implement this behavior is at the discretion of the server. Once the server has made the decision that all the content has been transferred, it MAY allow access to the resource via the GET method.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.6-2">A server SHOULD NOT be stateful. A server, however, MAY choose to store the start and end position of each content range received in external storage such as a file or database. The exact mechanism used to implement this behavior is at the discretion of the server. Once the server has made the decision that all of the content has been transferred, it MAY allow access to the resource via the GET method that is indicated in Content-Location.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="example-1">
@@ -1470,7 +1470,7 @@ Expect: 100-continue
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-cancel-partial-content-tran" class="section-name selfRef">Cancel Partial Content Transfer</a>
       </h2>
 <p id="section-4-1">The DELETE method MUST be used to cancel a partial content transfer. When a client requests that a partial content transfer be canceled, the server MUST deallocate the storage previously provisioned for the transfer.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">Only the client originator can cancel the content transfer. The same client or a new client MAY begin a new partial content transfer before the existing transfer is complete. Starting a new partial content transfer intrinsically cancels any existing transfer.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-2">Only the client originator MAY cancel the content transfer. The same client or a new client MAY begin a new partial content transfer before the existing transfer is complete. Starting a new partial content transfer intrinsically cancels any existing transfer.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <div id="if-match-header-field">
 <section id="section-4.1">
         <h3 id="name-if-match-header-field-2">
@@ -1484,7 +1484,7 @@ Expect: 100-continue
         <h3 id="name-resource-contention-3">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-resource-contention-3" class="section-name selfRef">Resource Contention</a>
         </h3>
-<p id="section-4.2-1">It is possible that multiple clients MAY request that an origin server cancel a partial content transfer for the same resource. If the server is unable to fulfill the request because the resource is inaccessible, it MUST respond with 409 (Conflict). Since the request MUST be idempotent, a client MAY retry a 409 error response. A server MAY also return the Retry-After header field as defined in Section 7.1.3 of <span>[<a href="#RFC7231" class="cite xref">RFC7231</a>]</span> to provide a hint to the client as to how long it should wait before retrying the request.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">It is possible that multiple clients MAY request that an origin server cancel a partial content transfer for the same resource. If the server is unable to fulfill the request because the resource is inaccessible, it MUST respond with 409 (Conflict). Since the request MUST be idempotent, a client MAY retry a 409 error response. A server MAY also return the Retry-After header field as defined in Section 10.2.3 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span> to provide a hint to the client as to how long it should wait before retrying the request.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">If the server is unable to fulfill the request because the allocated storage for the resource no longer exists, the server MUST respond with 204 (No Content) because the transfer has already been canceled.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1508,8 +1508,8 @@ If-Match: "sz8L2qGcV0SHqg8rXwALVQ=="
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">This document has the same security considerations that are outlined in Section 5 of <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span>. There are additional risks from clients requesting unintentionally large resources. <a href="#new-transfer" class="auto internal xref">Section 2</a> and <a href="#update-transfer" class="auto internal xref">Section 3</a> describe the
-validation process and how to reject such a request. The maximum sizes allowed, in whole or in part, are at the discretion of the origin server.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">This document has the same security considerations that are outlined in Section 5 of <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span> and Section 7 of <span>[<a href="#RFC6266" class="cite xref">RFC6266</a>]</span>. There are additional risks from clients requesting unintentionally large resources. <a href="#new-transfer" class="auto internal xref">Section 2</a> and <a href="#update-transfer" class="auto internal xref">Section 3</a>
+describe the validation process and how to reject such a request. The maximum sizes allowed, in whole or in part, are at the discretion of the origin server.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">While this document mandates that entity tags be used in requests, it does not dictate the format or content of those values. An origin server SHOULD generate an entity tag that cannot be easily replayed. A few possible techniques might
 include rotating the entity tag during each request as well as encrypting or signing a value in the entity tag using a client certificate. These protective measures would be in addition to transport-level security, client authentication,
 and client authorization.<a href="#section-5-2" class="pilcrow">¶</a></p>
@@ -1552,22 +1552,6 @@ the Content-Disposition header as defined by <span>[<a href="#RFC2183" class="ci
         <dd>
 <span class="refAuthor">Reschke, J.</span>, <span class="refTitle">"Use of the Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)"</span>, <span class="seriesInfo">RFC 6266</span>, <span class="seriesInfo">DOI 10.17487/RFC6266</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6266">https://www.rfc-editor.org/rfc/rfc6266</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC7230">[RFC7230]</dt>
-        <dd>
-<span class="refAuthor">Fielding, R., Ed.</span> and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"Hypertext Transfer Protocol (HTTP/1.1): Message Syntax and Routing"</span>, <span class="seriesInfo">RFC 7230</span>, <span class="seriesInfo">DOI 10.17487/RFC7230</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7230">https://www.rfc-editor.org/rfc/rfc7230</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC7231">[RFC7231]</dt>
-        <dd>
-<span class="refAuthor">Fielding, R., Ed.</span> and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"Hypertext Transfer Protocol (HTTP/1.1): Semantics and Content"</span>, <span class="seriesInfo">RFC 7231</span>, <span class="seriesInfo">DOI 10.17487/RFC7231</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7231">https://www.rfc-editor.org/rfc/rfc7231</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC7232">[RFC7232]</dt>
-        <dd>
-<span class="refAuthor">Fielding, R., Ed.</span> and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"Hypertext Transfer Protocol (HTTP/1.1): Conditional Requests"</span>, <span class="seriesInfo">RFC 7232</span>, <span class="seriesInfo">DOI 10.17487/RFC7232</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7232">https://www.rfc-editor.org/rfc/rfc7232</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC7233">[RFC7233]</dt>
-        <dd>
-<span class="refAuthor">Fielding, R., Ed.</span>, <span class="refAuthor">Lafon, Y., Ed.</span>, and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"Hypertext Transfer Protocol (HTTP/1.1): Range Requests"</span>, <span class="seriesInfo">RFC 7233</span>, <span class="seriesInfo">DOI 10.17487/RFC7233</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7233">https://www.rfc-editor.org/rfc/rfc7233</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC7630">[RFC7630]</dt>
         <dd>
 <span class="refAuthor">Merkle, J., Ed.</span> and <span class="refAuthor">M. Lochter</span>, <span class="refTitle">"HMAC-SHA-2 Authentication Protocols in the User-based Security Model (USM) for SNMPv3"</span>, <span class="seriesInfo">RFC 7630</span>, <span class="seriesInfo">DOI 10.17487/RFC7630</span>, <time datetime="2015-10" class="refDate">October 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7630">https://www.rfc-editor.org/rfc/rfc7630</a>&gt;</span>. </dd>
@@ -1585,8 +1569,12 @@ the Content-Disposition header as defined by <span>[<a href="#RFC2183" class="ci
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8594">[RFC8594]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Wilde, E.</span>, <span class="refTitle">"The Sunset HTTP Header Field"</span>, <span class="seriesInfo">RFC 8594</span>, <span class="seriesInfo">DOI 10.17487/RFC8594</span>, <time datetime="2019-05" class="refDate">May 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8594">https://www.rfc-editor.org/rfc/rfc8594</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9110">[RFC9110]</dt>
+      <dd>
+<span class="refAuthor">Fielding, R., Ed.</span>, <span class="refAuthor">Nottingham, M., Ed.</span>, and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"HTTP Semantics"</span>, <span class="seriesInfo">STD 97</span>, <span class="seriesInfo">RFC 9110</span>, <span class="seriesInfo">DOI 10.17487/RFC9110</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9110">https://www.rfc-editor.org/rfc/rfc9110</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1610,7 +1598,7 @@ the Content-Disposition header as defined by <span>[<a href="#RFC2183" class="ci
       <h2 id="name-appendix-a-content-disposit">
 <a href="#name-appendix-a-content-disposit" class="section-name selfRef">Appendix A. Content-Disposition Versus Content-Length</a>
       </h2>
-<p id="appendix-A-1">The Content-Length header field defined in Section 3.3.2 of <span>[<a href="#RFC7630" class="cite xref">RFC7630</a>]</span> is the most appropriate header field to indicate the size of the intended content being transferred. As Section 3 of <span>[<a href="#RFC7631" class="cite xref">RFC7631</a>]</span> indicates, a 'representation' can be anything. In this document, the 'representation' would be the allocated storage for the content transfer, such as a file.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">The Content-Length header field defined in Section 3.3.2 of <span>[<a href="#RFC7630" class="cite xref">RFC7630</a>]</span> is the most appropriate header field to indicate the size of the intended content being transferred. As Section 3 of <span>[<a href="#RFC7631" class="cite xref">RFC7631</a>]</span> indicates, a 'representation' can be anything. In this document, the "representation" would be the allocated storage for the content transfer, such as a file.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">The client scripting engines of modern browsers use the XMLHttpRequest (XHR) API. Section 4.5.2 of the <span>[<a href="#XHR" class="cite xref">XHR</a>]</span> specification clearly indicates that the Content-Length header is restricted and may only be set by the browser. The inability to set the Content-Length header without a body makes it an unusable header field as it relates to this document.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <p id="appendix-A-3">In lieu of defining a new header field, this document elected to use the existing Content-Disposition header field defined in <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span> and <span>[<a href="#RFC6266" class="cite xref">RFC6266</a>]</span> to serve the same purpose.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
 </section>
