@@ -3,9 +3,9 @@
 
 
 WG Working Group                                             C. Martinez
-Internet-Draft                                           7 November 2023
+Internet-Draft                                           8 November 2023
 Intended status: Informational                                          
-Expires: 10 May 2024
+Expires: 11 May 2024
 
 
                     Partial Content Uploads in HTTP
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 May 2024.
+   This Internet-Draft will expire on 11 May 2024.
 
 Copyright Notice
 
@@ -153,7 +153,7 @@ Table of Contents
    field.  If an origin server refuses to allocate the requested storage
    (ex: due to policy limit), it MUST respond with 400 (Bad Request).
    It is RECOMMENDED that such a response include problem details as
-   defined in [RFC7807], which explains why the content cannot be
+   defined in [RFC7807] which explains why the content cannot be
    allocated.  When an origin server fails to allocate storage for the
    resource, then it MUST respond with 507 (Insufficient Storage).  If
    the client is not authorized to create the requested resource, the
@@ -178,10 +178,16 @@ Table of Contents
 
 2.1.1.  The Create Disposition Type
 
-   The disposition type 'create' is REQUIRED and is meant to instruct
+   The disposition type "create" is REQUIRED and is meant to instruct
    the origin server that it should pre-allocate the required storage
    space, but the request itself does not contain a body that is to be
    written to storage.
+
+   If a client were to send one of the existing disposition types
+   "inline" or "attachment" to an origin server without a body, it is
+   not clear what action the server should take.  The disposition type
+   "create" expresses a client's expectation that the disposition of the
+   origin server is to create a resource of "size" octets.
 
 2.1.2.  Disposition Parameter: 'Size'
 
@@ -191,7 +197,26 @@ Table of Contents
 
    If a client does not provide the size parameter or the size is equal
    to or less than zero, the origin server MUST respond with 411 (Length
-   Required).
+   Required).  If the origin server refuses to allocate the requested
+   storage, it MUST respond with 400 (Bad Request).  It is RECOMMENDED
+   that such a response include problem details as defined in [RFC7807]
+   which explains why the content cannot be allocated and includes the
+   maximum allowable size.  For example, if the requested size is too
+   large, the server could respond with:
+
+   HTTP/1.1 400 Bad Request
+   Content-Type: application/problem+json
+   Content-Language: en
+
+   {
+     "type": "<rfc url>#<rfc section>",
+     "title": "The requested resource size is too large."
+     "detail": "The requested size was 1TB, but the maximum, allowed size is 200GB.",
+     "allowed": {
+       "size": 200,
+       "unit": "GB"
+     }
+   }
 
 2.1.3.  Disposition Parameter: 'Filename'
 
@@ -320,7 +345,7 @@ Table of Contents
    ensure the server is willing to accept the size of the content being
    sent.  If the client sends more partial content than the server is
    willing to accept in a single request, it MUST respond with 413
-   (Entity Too Large).
+   (Payload Too Large).
 
 3.5.  Resource Contention
 
@@ -422,11 +447,35 @@ Table of Contents
 
 5.  Security Considerations
 
-   TODO Security
+   This document has the same security considerations that are outlined
+   in Section 5 of [RFC2183].  There are additional risks from clients
+   requesting unintentionally large resources.  Section 2 and Section 3
+   describe the validation process and how to reject such a request.
+   The maximum sizes allowed, in whole or in part, are at the discretion
+   of the origin server.
+
+   While this document mandates that entity tags be used in requests, it
+   does not dictate the format or content of those values.  An origin
+   server SHOULD generate an entity tag that cannot be easily replayed.
+   A few possible techniques might include rotating the entity tag
+   during each request as well as encrypting or signing a value in the
+   entity tag using a client certificate.  These protective measures
+   would be in addition to transport-level security, client
+   authentication, and client authorization.
 
 6.  IANA Considerations
 
-   TODO IANA
+   This document registers a new "disposition-type" value for the
+   Content-Disposition header: create.  The definition and usage of this
+   value is described in Section 2.1.1.  IANA is asked to add a new
+   "disposition-type" value to the Content-Disposition header as defined
+   by [RFC2183]:
+
+   create: allocate a resource of "size" octets without a body
+
+   The "size" parameter is REQUIRED.  The "filename", "creation-date",
+   "modification-date", and "read-date" are OPTIONAL.  Any other
+   parameters are unused and SHOULD be ignored.
 
 7.  References
 

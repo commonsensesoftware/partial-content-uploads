@@ -1032,7 +1032,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Martinez</td>
-<td class="center">Expires 10 May 2024</td>
+<td class="center">Expires 11 May 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1045,12 +1045,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-partial-content-uploads-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-11-07" class="published">7 November 2023</time>
+<time datetime="2023-11-08" class="published">8 November 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-05-10">10 May 2024</time></dd>
+<dd class="expires"><time datetime="2024-05-11">11 May 2024</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1093,7 +1093,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 10 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 11 May 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1265,13 +1265,13 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 </div>
 </section>
 </div>
-<div id="new-partial-content-transfer">
+<div id="new-transfer">
 <section id="section-2">
       <h2 id="name-new-partial-content-transfe">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-new-partial-content-transfe" class="section-name selfRef">New Partial Content Transfer</a>
       </h2>
 <p id="section-2-1">The POST method MUST be used to indicate that the client intends to start a new partial content transfer. The client MUST send the Content-Disposition header field defined in <span>[<a href="#RFC6266" class="cite xref">RFC6266</a>]</span> to indicate how the origin server should process the content. This will provide enough information for the origin server to allocate the required storage space before any content is transferred. This behavior ensures that the origin server has enough storage space and the client is authorized to upload the content.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">If the origin server successfully allocates the required storage, it MUST respond with 201 (Created), including a Location and ETag header field. If an origin server refuses to allocate the requested storage (ex: due to policy limit), it MUST respond with 400 (Bad Request). It is RECOMMENDED that such a response include problem details as defined in <span>[<a href="#RFC7807" class="cite xref">RFC7807</a>]</span>, which explains why the content cannot be allocated. When an origin server fails to allocate storage for the resource, then it MUST respond with 507 (Insufficient Storage). If the client is not authorized to create the requested resource, the origin server MUST respond with 401 (Unauthorized) if authentication is possible; otherwise, it MUST respond with 403 (Forbidden).<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-2">If the origin server successfully allocates the required storage, it MUST respond with 201 (Created), including a Location and ETag header field. If an origin server refuses to allocate the requested storage (ex: due to policy limit), it MUST respond with 400 (Bad Request). It is RECOMMENDED that such a response include problem details as defined in <span>[<a href="#RFC7807" class="cite xref">RFC7807</a>]</span> which explains why the content cannot be allocated. When an origin server fails to allocate storage for the resource, then it MUST respond with 507 (Insufficient Storage). If the client is not authorized to create the requested resource, the origin server MUST respond with 401 (Unauthorized) if authentication is possible; otherwise, it MUST respond with 403 (Forbidden).<a href="#section-2-2" class="pilcrow">¶</a></p>
 <p id="section-2-3">There is no temporal specification as to how long a client can take to transfer all the content ranges. A server MAY choose to implicitly cancel a transfer it deems abandoned due to inactivity after an arbitrary period or after an absolute amount of time has passed. It is RECOMMENDED that an origin server which knows when the transfer will be considered canceled return the Sunset header as defined in <span>[<a href="#RFC8594" class="cite xref">RFC8594</a>]</span>, which indicates the cancellation date and time. <a href="#cancel-transfer" class="auto internal xref">Section 4</a> describes how a transfer is explicitly canceled.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <div id="the-content-disposition-header-field">
 <section id="section-2.1">
@@ -1279,12 +1279,14 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-the-content-disposition-hea" class="section-name selfRef">The Content-Disposition Header Field</a>
         </h3>
 <p id="section-2.1-1">Content-Disposition is a REQUIRED header field. In its absence, the origin server MUST respond with 400 (Bad Request). This header field indicates that the origin server should create a new storage resource and of what size.<a href="#section-2.1-1" class="pilcrow">¶</a></p>
-<div id="the-create-disposition-type">
+<div id="create-disposition-type">
 <section id="section-2.1.1">
           <h4 id="name-the-create-disposition-type">
 <a href="#section-2.1.1" class="section-number selfRef">2.1.1. </a><a href="#name-the-create-disposition-type" class="section-name selfRef">The Create Disposition Type</a>
           </h4>
-<p id="section-2.1.1-1">The disposition type 'create' is REQUIRED and is meant to instruct the origin server that it should pre-allocate the required storage space, but the request itself does not contain a body that is to be written to storage.<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1-1">The disposition type "create" is REQUIRED and is meant to instruct the origin server that it should pre-allocate the required storage space, but the request itself does not contain a body that is to be written to storage.<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1-2">If a client were to send one of the existing disposition types "inline" or "attachment" to an origin server without a body, it is not clear what action the server should take. The disposition type "create" expresses a
+client's expectation that the disposition of the origin server is to create a resource of "size" octets.<a href="#section-2.1.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="disposition-parameter-size">
@@ -1293,7 +1295,26 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
 <a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-disposition-parameter-size" class="section-name selfRef">Disposition Parameter: 'Size'</a>
           </h4>
 <p id="section-2.1.2-1">The size parameter is REQUIRED and has the same meaning as defined in Section 2.7 of <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span>. The origin server MUST use this value as the amount of storage to allocate in octets.<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
-<p id="section-2.1.2-2">If a client does not provide the size parameter or the size is equal to or less than zero, the origin server MUST respond with 411 (Length Required).<a href="#section-2.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-2.1.2-2">If a client does not provide the size parameter or the size is equal to or less than zero, the origin server MUST respond with 411 (Length Required). If the origin server refuses to allocate the requested storage, it MUST
+respond with 400 (Bad Request). It is RECOMMENDED that such a response include problem details as defined in <span>[<a href="#RFC7807" class="cite xref">RFC7807</a>]</span> which explains why the content cannot be allocated and includes the maximum allowable size. For example,
+if the requested size is too large, the server could respond with:<a href="#section-2.1.2-2" class="pilcrow">¶</a></p>
+<div class="lang-http sourcecode" id="section-2.1.2-3">
+<pre>
+HTTP/1.1 400 Bad Request
+Content-Type: application/problem+json
+Content-Language: en
+
+{
+  "type": "&lt;rfc url&gt;#&lt;rfc section&gt;",
+  "title": "The requested resource size is too large."
+  "detail": "The requested size was 1TB, but the maximum, allowed size is 200GB.",
+  "allowed": {
+    "size": 200,
+    "unit": "GB"
+  }
+}
+</pre><a href="#section-2.1.2-3" class="pilcrow">¶</a>
+</div>
 </section>
 </div>
 <div id="disposition-parameter-filename">
@@ -1362,7 +1383,7 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
 </div>
 </section>
 </div>
-<div id="update-partial-content-transfer">
+<div id="update-transfer">
 <section id="section-3">
       <h2 id="name-update-partial-content-tran">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-update-partial-content-tran" class="section-name selfRef">Update Partial Content Transfer</a>
@@ -1400,7 +1421,7 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
         <h3 id="name-expect-header-field">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-expect-header-field" class="section-name selfRef">Expect Header Field</a>
         </h3>
-<p id="section-3.4-1">Expect is an OPTIONAL header field and has the same meaning as defined in Section 5.1.1 of <span>[<a href="#RFC7231" class="cite xref">RFC7231</a>]</span>. Partial content uploads can still be large. Clients SHOULD send the 100-Continue expectation to ensure the server is willing to accept the size of the content being sent. If the client sends more partial content than the server is willing to accept in a single request, it MUST respond with 413 (Entity Too Large).<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">Expect is an OPTIONAL header field and has the same meaning as defined in Section 5.1.1 of <span>[<a href="#RFC7231" class="cite xref">RFC7231</a>]</span>. Partial content uploads can still be large. Clients SHOULD send the 100-Continue expectation to ensure the server is willing to accept the size of the content being sent. If the client sends more partial content than the server is willing to accept in a single request, it MUST respond with 413 (Payload Too Large).<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="resource-contention-1">
@@ -1487,7 +1508,11 @@ If-Match: "sz8L2qGcV0SHqg8rXwALVQ=="
       <h2 id="name-security-considerations">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-5-1">TODO Security<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">This document has the same security considerations that are outlined in Section 5 of <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span>. There are additional risks from clients requesting unintentionally large resources. <a href="#new-transfer" class="auto internal xref">Section 2</a> and <a href="#update-transfer" class="auto internal xref">Section 3</a> describe the
+validation process and how to reject such a request. The maximum sizes allowed, in whole or in part, are at the discretion of the origin server.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">While this document mandates that entity tags be used in requests, it does not dictate the format or content of those values. An origin server SHOULD generate an entity tag that cannot be easily replayed. A few possible techniques might
+include rotating the entity tag during each request as well as encrypting or signing a value in the entity tag using a client certificate. These protective measures would be in addition to transport-level security, client authentication,
+and client authorization.<a href="#section-5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -1495,7 +1520,10 @@ If-Match: "sz8L2qGcV0SHqg8rXwALVQ=="
       <h2 id="name-iana-considerations">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-6-1">TODO IANA<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">This document registers a new "disposition-type" value for the Content-Disposition header: create. The definition and usage of this value is described in <a href="#create-disposition-type" class="auto internal xref">Section 2.1.1</a>. IANA is asked to add a new "disposition-type" value to
+the Content-Disposition header as defined by <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span>:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">create: allocate a resource of "size" octets without a body<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The "size" parameter is REQUIRED. The "filename", "creation-date", "modification-date", and "read-date" are OPTIONAL. Any other parameters are unused and SHOULD be ignored.<a href="#section-6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-7">
