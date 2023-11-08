@@ -204,7 +204,6 @@ Table of Contents
    maximum allowable size.  For example, if the requested size is too
    large, the server MAY respond with:
 
-   HTTP/1.1 400 Bad Request
    Content-Type: application/problem+json
    Content-Language: en
 
