@@ -1284,7 +1284,7 @@ appear in all capitals, as shown here.<a href="#section-1.1-1" class="pilcrow">�
           <h4 id="name-the-create-disposition-type">
 <a href="#section-2.1.1" class="section-number selfRef">2.1.1. </a><a href="#name-the-create-disposition-type" class="section-name selfRef">The Create Disposition Type</a>
           </h4>
-<p id="section-2.1.1-1">The disposition type "create" is REQUIRED and is meant to instruct the origin server that it should pre-allocate the required storage space, but the request itself does not contain a body that is to be written to storage.<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-2.1.1-1">The disposition type "create" is REQUIRED and is meant to instruct the origin server that it should preallocate the required storage space, but the request itself does not contain a body that is to be written to storage.<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-2.1.1-2">If a client were to send one of the existing disposition types "inline" or "attachment" to an origin server without a body, it is not clear what action the server should take. The disposition type "create" expresses a
 client's expectation that the disposition of the origin server is to create a resource of "size" octets.<a href="#section-2.1.1-2" class="pilcrow">¶</a></p>
 </section>
@@ -1308,10 +1308,7 @@ Content-Language: en
   "type": "&lt;rfc url&gt;#&lt;rfc section&gt;",
   "title": "The requested resource size is too large."
   "detail": "1TB exceeds the 200GB maximum, allowed size.",
-  "allowed": {
-    "size": 200,
-    "unit": "GB"
-  }
+  "max-size": 2e+11
 }
 </pre><a href="#section-2.1.2-3" class="pilcrow">¶</a>
 </div>
@@ -1389,7 +1386,7 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-update-partial-content-tran" class="section-name selfRef">Update Partial Content Transfer</a>
       </h2>
 <p id="section-3-1">The PATCH method MUST be used to update partial content. Unlike other uses of PATCH, an origin server MUST complete this operation idempotently. Given the entity tag provided by the client and the fact that the required storage space has already been allocated, the origin server has enough information to safely fulfill the request idempotently. This behavior is true even if multiple client requests occur concurrently or overlap in content range.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">If the origin server successfully updates the specified content range and more content is expected, then it MUST respond with 204 (No Content). If the origin server determines no further content is expected, then it MUST respond with 201 (Created) and Content-Location. Content-Location indicates the URL where the client can retrieve the resource with a GET request, which MAY not previously be known to the client. If the Content-Disposition header field contained the modification-date parameter, then the origin server MUST also return this value in the response Last-Modified header field.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">If the origin server successfully updates the specified content range and more content is expected, then it MUST respond with 202 (Accepted). If the origin server determines no further content is expected, then it MUST respond with 201 (Created) and Content-Location. Content-Location indicates the URL where the client can retrieve the resource with a GET request, which MAY not previously be known to the client. If the Content-Disposition header field contained the modification-date parameter, then the origin server MUST also return this value in the response Last-Modified header field.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <div id="content-range-header-field">
 <section id="section-3.1">
         <h3 id="name-content-range-header-field">

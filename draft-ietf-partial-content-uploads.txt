@@ -179,7 +179,7 @@ Table of Contents
 2.1.1.  The Create Disposition Type
 
    The disposition type "create" is REQUIRED and is meant to instruct
-   the origin server that it should pre-allocate the required storage
+   the origin server that it should preallocate the required storage
    space, but the request itself does not contain a body that is to be
    written to storage.
 
@@ -212,10 +212,7 @@ Table of Contents
      "type": "<rfc url>#<rfc section>",
      "title": "The requested resource size is too large."
      "detail": "1TB exceeds the 200GB maximum, allowed size.",
-     "allowed": {
-       "size": 200,
-       "unit": "GB"
-     }
+     "max-size": 2e+11
    }
 
 2.1.3.  Disposition Parameter: 'Filename'
@@ -295,8 +292,8 @@ Table of Contents
    occur concurrently or overlap in content range.
 
    If the origin server successfully updates the specified content range
-   and more content is expected, then it MUST respond with 204 (No
-   Content).  If the origin server determines no further content is
+   and more content is expected, then it MUST respond with 202
+   (Accepted).  If the origin server determines no further content is
    expected, then it MUST respond with 201 (Created) and Content-
    Location.  Content-Location indicates the URL where the client can
    retrieve the resource with a GET request, which MAY not previously be
