@@ -505,16 +505,6 @@ Table of Contents
               DOI 10.17487/RFC6266, June 2011,
               <https://www.rfc-editor.org/rfc/rfc6266>.
 
-   [RFC7630]  Merkle, J., Ed. and M. Lochter, "HMAC-SHA-2 Authentication
-              Protocols in the User-based Security Model (USM) for
-              SNMPv3", RFC 7630, DOI 10.17487/RFC7630, October 2015,
-              <https://www.rfc-editor.org/rfc/rfc7630>.
-
-   [RFC7631]  Dearlove, C. and T. Clausen, "TLV Naming in the Mobile Ad
-              Hoc Network (MANET) Generalized Packet/Message Format",
-              RFC 7631, DOI 10.17487/RFC7631, September 2015,
-              <https://www.rfc-editor.org/rfc/rfc7631>.
-
    [RFC7807]  Nottingham, M. and E. Wilde, "Problem Details for HTTP
               APIs", RFC 7807, DOI 10.17487/RFC7807, March 2016,
               <https://www.rfc-editor.org/rfc/rfc7807>.
@@ -539,10 +529,10 @@ Table of Contents
 
 Appendix A.  Content-Disposition Versus Content-Length
 
-   The Content-Length header field defined in Section 3.3.2 of [RFC7630]
+   The Content-Length header field defined in Section 8.6 of [RFC9110]
    is the most appropriate header field to indicate the size of the
-   intended content being transferred.  As Section 3 of [RFC7631]
-   indicates, a 'representation' can be anything.  In this document, the
+   intended content being transferred.  As Section 8 of [RFC9110]
+   indicates, a "representation" can be anything.  In this document, the
    "representation" would be the allocated storage for the content
    transfer, such as a file.
 

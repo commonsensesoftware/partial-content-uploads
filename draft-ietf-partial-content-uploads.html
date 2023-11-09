@@ -1548,14 +1548,6 @@ the Content-Disposition header as defined by <span>[<a href="#RFC2183" class="ci
         <dd>
 <span class="refAuthor">Reschke, J.</span>, <span class="refTitle">"Use of the Content-Disposition Header Field in the Hypertext Transfer Protocol (HTTP)"</span>, <span class="seriesInfo">RFC 6266</span>, <span class="seriesInfo">DOI 10.17487/RFC6266</span>, <time datetime="2011-06" class="refDate">June 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6266">https://www.rfc-editor.org/rfc/rfc6266</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC7630">[RFC7630]</dt>
-        <dd>
-<span class="refAuthor">Merkle, J., Ed.</span> and <span class="refAuthor">M. Lochter</span>, <span class="refTitle">"HMAC-SHA-2 Authentication Protocols in the User-based Security Model (USM) for SNMPv3"</span>, <span class="seriesInfo">RFC 7630</span>, <span class="seriesInfo">DOI 10.17487/RFC7630</span>, <time datetime="2015-10" class="refDate">October 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7630">https://www.rfc-editor.org/rfc/rfc7630</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC7631">[RFC7631]</dt>
-        <dd>
-<span class="refAuthor">Dearlove, C.</span> and <span class="refAuthor">T. Clausen</span>, <span class="refTitle">"TLV Naming in the Mobile Ad Hoc Network (MANET) Generalized Packet/Message Format"</span>, <span class="seriesInfo">RFC 7631</span>, <span class="seriesInfo">DOI 10.17487/RFC7631</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7631">https://www.rfc-editor.org/rfc/rfc7631</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC7807">[RFC7807]</dt>
         <dd>
 <span class="refAuthor">Nottingham, M.</span> and <span class="refAuthor">E. Wilde</span>, <span class="refTitle">"Problem Details for HTTP APIs"</span>, <span class="seriesInfo">RFC 7807</span>, <span class="seriesInfo">DOI 10.17487/RFC7807</span>, <time datetime="2016-03" class="refDate">March 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7807">https://www.rfc-editor.org/rfc/rfc7807</a>&gt;</span>. </dd>
@@ -1594,7 +1586,7 @@ the Content-Disposition header as defined by <span>[<a href="#RFC2183" class="ci
       <h2 id="name-appendix-a-content-disposit">
 <a href="#name-appendix-a-content-disposit" class="section-name selfRef">Appendix A. Content-Disposition Versus Content-Length</a>
       </h2>
-<p id="appendix-A-1">The Content-Length header field defined in Section 3.3.2 of <span>[<a href="#RFC7630" class="cite xref">RFC7630</a>]</span> is the most appropriate header field to indicate the size of the intended content being transferred. As Section 3 of <span>[<a href="#RFC7631" class="cite xref">RFC7631</a>]</span> indicates, a 'representation' can be anything. In this document, the "representation" would be the allocated storage for the content transfer, such as a file.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">The Content-Length header field defined in Section 8.6 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span> is the most appropriate header field to indicate the size of the intended content being transferred. As Section 8 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span> indicates, a "representation" can be anything. In this document, the "representation" would be the allocated storage for the content transfer, such as a file.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 <p id="appendix-A-2">The client scripting engines of modern browsers use the XMLHttpRequest (XHR) API. Section 4.5.2 of the <span>[<a href="#XHR" class="cite xref">XHR</a>]</span> specification clearly indicates that the Content-Length header is restricted and may only be set by the browser. The inability to set the Content-Length header without a body makes it an unusable header field as it relates to this document.<a href="#appendix-A-2" class="pilcrow">¶</a></p>
 <p id="appendix-A-3">In lieu of defining a new header field, this document elected to use the existing Content-Disposition header field defined in <span>[<a href="#RFC2183" class="cite xref">RFC2183</a>]</span> and <span>[<a href="#RFC6266" class="cite xref">RFC6266</a>]</span> to serve the same purpose.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
 </section>
