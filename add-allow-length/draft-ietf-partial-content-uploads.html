@@ -1347,7 +1347,7 @@ Content-Language: en
         <h3 id="name-the-allow-length-header-fie">
 <a href="#section-2.2" class="section-number selfRef">2.2. </a><a href="#name-the-allow-length-header-fie" class="section-name selfRef">The Allow-Length Header Field</a>
         </h3>
-<p id="section-2.2-1">The Allow-Length response header field allows a server to communicate the allowable length of content. It provides information to clients that enables them to control delimiting framing as they send partial content to the server. It is RECOMMENDED that an origin server return the Allow-Length header when a resource is provisioned for a transfer.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
+<p id="section-2.2-1">The Allow-Length response header field allows a server to communicate the allowable length of content. It provides information to clients that enables them to delimit framing as they send partial content to the server. It is RECOMMENDED that an origin server return the Allow-Length header field when a resource is provisioned for a transfer.<a href="#section-2.2-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-2.2-2">
 <pre>
 Content-Length = 1*DIGIT
@@ -1360,7 +1360,7 @@ Allow-Length: 10000000
 </pre><a href="#section-2.2-4" class="pilcrow">¶</a>
 </div>
 <p id="section-2.2-5">In the absence of the Allow-Length header field, a client is required to know the maximum length through out-of-band knowledge such as publicly documented policy or through probing requests until a suitable length is determined.<a href="#section-2.2-5" class="pilcrow">¶</a></p>
-<p id="section-2.2-6">An origin server MAY choose to return Allow-Length in a HEAD or OPTIONS request for a client that did not persist the value and resumes a transfer at a later time. The specified Allow-Length SHOULD NOT change for the lifetime of the transfer. If the value does change during a transfer, then the origin server SHOULD support the HEAD method, OPTIONS method, or both, which will respond with an updated Allow-Length header field.<a href="#section-2.2-6" class="pilcrow">¶</a></p>
+<p id="section-2.2-6">An origin server MAY choose to return Allow-Length in a HEAD or OPTIONS request for a client that did not persist the value and resumes a transfer at a later time. The specified Allow-Length SHOULD NOT change for the lifetime of a transfer. If the value does change during a transfer, then the origin server SHOULD support the HEAD method, OPTIONS method, or both, that SHALL respond with an updated Allow-Length header field.<a href="#section-2.2-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="resource-contention">
@@ -1449,7 +1449,7 @@ Sunset: Mon, 13 Nov 2023 00:00:00 GMT
         <h3 id="name-expect-header-field">
 <a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-expect-header-field" class="section-name selfRef">Expect Header Field</a>
         </h3>
-<p id="section-3.4-1">Expect is an OPTIONAL header field and has the same meaning as defined in Section 10.1.1 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. Partial content uploads can still be large. Clients SHOULD send the 100-Continue expectation to ensure the server is willing to accept the size of the content being sent. If the client sends more partial content than the server is willing to accept in a single request, it MUST respond with 413 (Payload Too Large). The server SHOULD also respond with the Allow-Length header (<a href="#allow-length" class="auto internal xref">Section 2.2</a>) to indicate the maximum length allowed by the server.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-1">Expect is an OPTIONAL header field and has the same meaning as defined in Section 10.1.1 of <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. Partial content uploads can still be large. Clients SHOULD send the 100-Continue expectation to ensure the server is willing to accept the size of the content being sent. If the client sends more partial content than the server is willing to accept in a single request, it MUST respond with 413 (Payload Too Large). The server SHOULD also respond with the Allow-Length header field (<a href="#allow-length" class="auto internal xref">Section 2.2</a>) to indicate the maximum length allowed by the server.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="resource-contention-1">
