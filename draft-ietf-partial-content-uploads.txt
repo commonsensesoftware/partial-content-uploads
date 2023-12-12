@@ -3,9 +3,9 @@
 
 
 WG Working Group                                             C. Martinez
-Internet-Draft                                          28 November 2023
+Internet-Draft                                          12 December 2023
 Intended status: Informational                                          
-Expires: 31 May 2024
+Expires: 14 June 2024
 
 
                     Partial Content Uploads in HTTP
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 May 2024.
+   This Internet-Draft will expire on 14 June 2024.
 
 Copyright Notice
 
@@ -99,6 +99,7 @@ Table of Contents
      7.1.  Normative References
      7.2.  Informative References
    Appendix A.  Content-Disposition Versus Content-Length
+   Acknowledgements
    Author's Address
 
 1.  Introduction
@@ -603,6 +604,11 @@ Appendix A.  Content-Disposition Versus Content-Length
    In lieu of defining a new header field, this document elected to use
    the existing Content-Disposition header field defined in [RFC2183]
    and [RFC6266] to serve the same purpose.
+
+Acknowledgements
+
+   The author would like to thank James Zimmerman, Hongtao Chen, and
+   Xavier John for their valuable contributions and reviews.
 
 Author's Address
 
