@@ -3,9 +3,9 @@
 
 
 WG Working Group                                             C. Martinez
-Internet-Draft                                          12 December 2023
+Internet-Draft                                              2 April 2024
 Intended status: Informational                                          
-Expires: 14 June 2024
+Expires: 4 October 2024
 
 
                     Partial Content Uploads in HTTP
@@ -47,11 +47,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 June 2024.
+   This Internet-Draft will expire on 4 October 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -68,7 +68,7 @@ Table of Contents
    1.  Introduction
      1.1.  Terminology
      1.2.  Syntax Notation
-   2.  New Partial Content Transfer
+   2.  New Partial Content Upload
      2.1.  The Content-Disposition Header Field
        2.1.1.  The Create Disposition Type
        2.1.2.  Disposition Parameter: 'Size'
@@ -79,25 +79,33 @@ Table of Contents
      2.4.  Entity Tags
      2.5.  Resource Retrieval
      2.6.  Example
-   3.  Update Partial Content Transfer
+   3.  Update Partial Content Upload
      3.1.  Content-Range Header Field
      3.2.  Last-Modified Header Field
      3.3.  If-Match Header Field
      3.4.  Expect Header Field
      3.5.  Resource Contention
-     3.6.  Completing the Transfer
+     3.6.  Completing the Upload
      3.7.  Example
-   4.  Cancel Partial Content Transfer
+   4.  Cancel Partial Content Upload
      4.1.  If-Match Header Field
      4.2.  Resource Contention
      4.3.  Example
-   5.  Security Considerations
-   6.  IANA Considerations
-     6.1.  The Create Disposition Type
-     6.2.  The Allow-Length Response Header Field
-   7.  References
-     7.1.  Normative References
-     7.2.  Informative References
+   5.  Get Partial Content Upload Metadata
+     5.1.  Allow-Length Header Field
+     5.2.  Content-Length Header Field
+     5.3.  ETag Header Field
+     5.4.  Last-Modified Header Field
+     5.5.  Sunset Header Field
+     5.6.  Range Header Field
+     5.7.  Example
+   6.  Security Considerations
+   7.  IANA Considerations
+     7.1.  The Create Disposition Type
+     7.2.  The Allow-Length Response Header Field
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Appendix A.  Content-Disposition Versus Content-Length
    Acknowledgements
    Author's Address
@@ -141,57 +149,58 @@ Table of Contents
    lists using a '#' operator (similar to how the '*' operator indicates
    repetition).
 
-2.  New Partial Content Transfer
+2.  New Partial Content Upload
 
    The POST method MUST be used to indicate that the client intends to
-   start a new partial content transfer.  The client MUST send the
+   start a new partial content upload.  The client MUST send the
    Content-Disposition header field defined in [RFC6266] to indicate how
-   the origin server should process the content.  This will provide
-   enough information for the origin server to allocate the required
-   storage space before any content is transferred.  This behavior
-   ensures that the origin server has enough storage space and the
-   client is authorized to upload the content.
+   the origin server is expected process the content.  This will provide
+   enough information for the origin server to allocate the requested
+   storage space before any content is uploaded.  This behavior ensures
+   that the origin server has enough storage space and the client is
+   authorized to upload the content.
 
-   If the origin server successfully allocates the required storage, it
+   If the origin server successfully allocates the necessary storage, it
    MUST respond with 201 (Created), including a Location and ETag header
    field.  A server MAY elect to return the Allow-Length header field,
-   which indicates maximum allowed length of subsequent partial content.
-   If an origin server refuses to allocate the requested storage (ex:
-   due to policy limit), it MUST respond with 400 (Bad Request).  It is
-   RECOMMENDED that such a response include problem details as defined
-   in [RFC7807] which explains why the content cannot be allocated.
-   When an origin server fails to allocate storage for the resource,
-   then it MUST respond with 507 (Insufficient Storage).  If the client
-   is not authorized to create the requested resource, the origin server
-   MUST respond with 401 (Unauthorized) if authentication is possible;
-   otherwise, it MUST respond with 403 (Forbidden).
+   which indicates the maximum allowed length of any subsequent partial
+   content.  If an origin server refuses to allocate the requested
+   storage (ex: due to policy limit), it MUST respond with 422
+   (Unprocessable Content).  It is RECOMMENDED that such a response
+   include problem details as defined in [RFC7807] which explains why
+   the content cannot be allocated.  When an origin server fails to
+   allocate storage for the resource, then it MUST respond with 507
+   (Insufficient Storage).  If the client is not authorized to create
+   the requested resource, the origin server MUST respond with 401
+   (Unauthorized) if authentication is possible; otherwise, it MUST
+   respond with 403 (Forbidden).
 
-   There is no temporal specification as to how long a client can take
-   to transfer all the content ranges.  A server MAY choose to
-   implicitly cancel a transfer it deems abandoned due to inactivity
+   There is no temporal specification as to how long a client is allowed
+   take to upload all the content ranges.  A server MAY choose to
+   implicitly cancel an upload it deems abandoned due to inactivity
    after an arbitrary period or after an absolute amount of time has
    passed.  It is RECOMMENDED that an origin server which knows when the
-   transfer will be considered canceled return the Sunset header as
+   upload will be considered canceled return the Sunset header as
    defined in [RFC8594], which indicates the cancellation date and time.
-   Section 4 describes how a transfer is explicitly canceled.
+   Section 4 describes how an upload is explicitly canceled.
 
 2.1.  The Content-Disposition Header Field
 
    Content-Disposition is a REQUIRED header field.  In its absence, the
    origin server MUST respond with 400 (Bad Request).  This header field
-   indicates that the origin server should create a new storage resource
+   indicates that the origin server is to create a new storage resource
    and of what size.
 
 2.1.1.  The Create Disposition Type
 
    The disposition type "create" is REQUIRED and is meant to instruct
-   the origin server that it should preallocate the required storage
+   the origin server that it SHOULD preallocate the specified storage
    space, but the request itself does not contain a body that is to be
    written to storage.
 
    If a client were to send one of the existing disposition types
    "inline" or "attachment" to an origin server without a body, it is
-   not clear what action the server should take.  The disposition type
+   not clear what action the server MUST take.  The disposition type
    "create" expresses a client's expectation that the disposition of the
    origin server is to create a resource of "size" octets.
 
@@ -204,11 +213,11 @@ Table of Contents
    If a client does not provide the size parameter or the size is equal
    to or less than zero, the origin server MUST respond with 411 (Length
    Required).  If the origin server refuses to allocate the requested
-   storage, it MUST respond with 400 (Bad Request).  It is RECOMMENDED
-   that such a response include problem details as defined in [RFC7807]
-   which explains why the content cannot be allocated and includes the
-   maximum allowable size.  For example, if the requested size is too
-   large, the server MAY respond with:
+   storage, it MUST respond with 422 (Unprocessable Content).  It is
+   RECOMMENDED that such a response include problem details as defined
+   in [RFC7807] which explains why the content cannot be allocated and
+   includes the maximum allowable size.  For example, if the requested
+   size is too large, the server MAY respond with:
 
    Content-Type: application/problem+json
    Content-Language: en
@@ -241,8 +250,8 @@ Table of Contents
    the allowable length of content.  It provides information to clients
    that enables them to delimit framing as they send partial content to
    the server.  It is RECOMMENDED that an origin server return the
-   Allow-Length header field when a resource is provisioned for a
-   transfer.
+   Allow-Length header field when a resource is provisioned for an
+   upload.
 
    Content-Length = 1*DIGIT
 
@@ -250,33 +259,32 @@ Table of Contents
 
    Allow-Length: 10000000
 
-   In the absence of the Allow-Length header field, a client is required
-   to know the maximum length through out-of-band knowledge such as
-   publicly documented policy or through probing requests until a
-   suitable length is determined.
+   In the absence of the Allow-Length header field, a client is
+   obligated to know the maximum length allowed through out-of-band
+   knowledge such as a publicly documented policy or through probing
+   requests until a suitable length is determined.
 
    An origin server MAY choose to return Allow-Length in a HEAD or
    OPTIONS request for a client that did not persist the value and
-   resumes a transfer at a later time.  The specified Allow-Length
-   SHOULD NOT change for the lifetime of a transfer.  If the value does
-   change during a transfer, then the origin server SHOULD support the
-   HEAD method, OPTIONS method, or both, that SHALL respond with an
-   updated Allow-Length header field.
+   resumes an upload at a later time.  The specified Allow-Length SHOULD
+   NOT change for the lifetime of an upload.  If the value does change
+   during an upload, then the origin server SHOULD support the HEAD
+   method, OPTIONS method, or both, that SHALL respond with an updated
+   Allow-Length header field.
 
 2.3.  Resource Contention
 
    It is possible that multiple clients MAY request an origin server
    provision storage for the same resource.  An origin server SHOULD use
    optimistic behavior such that the last successful client request is
-   the owner of the remaining transfer requests.  The entity tag
-   returned by the origin server in the response provides the
-   correlation to all other requests for a given client.  If the server
-   is unable to fulfill the request because the resource cannot be
-   provisioned, it MUST respond with 409 (Conflict) to which a client
-   MAY retry the request.  A server MAY also return the Retry-After
-   header field as defined in Section 10.2.3 of [RFC9110] to provide a
-   hint to the client as to how long it should wait before retrying the
-   request.
+   the owner of the remaining upload requests.  The entity tag returned
+   by the origin server in the response provides the correlation to all
+   other requests for a given client.  If the server is unable to
+   fulfill the request because the resource cannot be provisioned, it
+   MUST respond with 409 (Conflict) to which a client MAY retry the
+   request.  A server MAY also return the Retry-After header field as
+   defined in Section 10.2.3 of [RFC9110] to provide a hint to the
+   client as to how long it SHOULD wait before retrying the request.
 
    It is NOT RECOMMENDED that origin servers employ a stateful locking
    strategy as it could result in a condition by which no client is able
@@ -285,11 +293,11 @@ Table of Contents
 
 2.4.  Entity Tags
 
-   Upon successful allocation of the required storage space, the origin
+   Upon successful allocation of the requested storage space, the origin
    server MUST return an entity tag in the response.  The entity tag
    MUST be used for all subsequent requests, including canceling the
-   entire transfer.  All entity tags returned by the origin server
-   SHOULD use strong validation.
+   entire upload.  All entity tags returned by the origin server SHOULD
+   use strong validation.
 
 2.5.  Resource Retrieval
 
@@ -297,36 +305,37 @@ Table of Contents
    support requesting that same resource for downloads.  An origin
    server that implements this capability MUST NOT allow GET requests,
    in part or in whole, to the provisioned resource until all the
-   corresponding resource content has been transferred to the origin
+   corresponding resource content has been uploaded to the origin
    server.  The origin server MUST respond with 404 (Not Found) for any
-   resource that has not been completely transferred.
+   resource that has not been completely uploaded.
 
 2.6.  Example
 
    Here is an example of a POST request to initiate a new partial
-   content transfer:
+   content upload:
 
    Content-Disposition: create; size=4294967296
 
    An example response would be:
 
-   Location: <URL>
+   Allow-Length: 10000000
    ETag: "sz8L2qGcV0SHqg8rXwALVQ=="
+   Location: <URL>
    Sunset: Mon, 13 Nov 2023 00:00:00 GMT
 
-3.  Update Partial Content Transfer
+3.  Update Partial Content Upload
 
    The PATCH method MUST be used to update partial content.  Unlike
    other uses of PATCH, an origin server MUST complete this operation
    idempotently.  Given the entity tag provided by the client and the
-   fact that the required storage space has already been allocated, the
+   fact that the necessary storage space has already been allocated, the
    origin server has enough information to safely fulfill the request
    idempotently.  This behavior is true even if multiple client requests
    occur concurrently or overlap in content range.
 
    If the origin server successfully updates the specified content range
    and more content is expected, then it MUST respond with 202
-   (Accepted); otherwise, the server MUST complete the transfer as
+   (Accepted); otherwise, the server MUST complete the upload as
    described in Section 3.6.  If the Content-Disposition header field
    contained the modification-date parameter, then the origin server
    MUST also return this value in the response Last-Modified header
@@ -336,13 +345,12 @@ Table of Contents
 
    Content-Range is a REQUIRED header field that has the same meaning as
    defined in Section 14.4 of [RFC9110].  The Content-Range header field
-   informs the origin server what part of the content is being
-   transferred.
+   informs the origin server what part of the content is being uploaded.
 
    If the byte-range in Content-Range is invalid or the complete-length
    does not match the provisioned storage amount defined by the size
    parameter in the Content-Disposition header field when the partial
-   content transfer was started, the server MUST respond with 416 (Range
+   content upload was started, the server MUST respond with 416 (Range
    Not Satisfiable).  A client SHOULD inspect the complete-length of the
    Content-Range header field in the error response to determine whether
    the source content has been modified.
@@ -352,19 +360,19 @@ Table of Contents
    Last-Modified is an OPTIONAL header field and has the same meaning as
    defined in Section 8.8.2 of [RFC9110].  If the modification-date
    parameter was specified in the Content-Disposition header field as
-   part of the start of the partial content transfer, then the origin
+   part of the start of the partial content upload, then the origin
    server MUST respond with the Last-Modified header field containing
    the same value.
 
    A client MAY use the Last-Modified header field to determine whether
-   its copy of the content being transferred is still the same as the
-   copy the origin server has.
+   its copy of the content being uploaded is still the same as the copy
+   the origin server has.
 
 3.3.  If-Match Header Field
 
    If-Match is a REQUIRED header field.  The If-Match header field MUST
    contain the entity tag returned by the origin server when the partial
-   content transfer was started.  If a client does not specify the If-
+   content upload was started.  If a client does not specify the If-
    Match header field, the server MUST respond with 428 (Precondition
    Required).  If the entity tag specified by the client does not match
    the value known to the server, the server MUST respond with 412
@@ -373,52 +381,52 @@ Table of Contents
 3.4.  Expect Header Field
 
    Expect is an OPTIONAL header field and has the same meaning as
-   defined in Section 10.1.1 of [RFC9110].  Partial content uploads can
-   still be large.  Clients SHOULD send the 100-Continue expectation to
-   ensure the server is willing to accept the size of the content being
-   sent.  If the client sends more partial content than the server is
-   willing to accept in a single request, it MUST respond with 413
-   (Payload Too Large).  The server SHOULD also respond with the Allow-
-   Length header field (Section 2.2) to indicate the maximum length
-   allowed by the server.
+   defined in Section 10.1.1 of [RFC9110].  It is still possible for
+   partial content uploads to be large.  Clients SHOULD send the
+   100-Continue expectation to ensure that the server is willing to
+   accept the size of the content being sent.  If the client sends more
+   partial content than the server is willing to accept in a single
+   request, it MUST respond with 413 (Payload Too Large).  The server
+   SHOULD also respond with the Allow-Length header field (Section 2.2)
+   to indicate the maximum length allowed by the server.
 
 3.5.  Resource Contention
 
    It is possible that multiple clients MAY request that an origin
-   server update a partial content transfer for the same resource.
+   server update a partial content upload for the same resource.
    Provided that the If-Match header field contains a valid entity tag
    (Section 3.3), an origin server SHOULD use an optimistic behavior
-   when copying the transferred content to storage.  If the server is
+   when copying the uploaded content to storage.  If the server is
    unable to fulfill the request because the resource is inaccessible,
    it MUST respond with 409 (Conflict).  Since the request MUST be
    idempotent, a client MAY retry a 409 error response.  A server MAY
    also return the Retry-After header field as defined in Section 10.2.3
-   of [RFC9110] to provide a hint to the client as to how long it should
+   of [RFC9110] to provide a hint to the client as to how long it SHOULD
    wait before retrying the request.
 
    If the server is unable to fulfill the request because the allocated
    storage for the resource no longer exists, the server MUST respond
    with 410 (Gone).
 
-   Retrying large content transfers can strain network resources and are
+   Retrying large content uploads MAY strain network resources and are
    likely to have high latency.  If the origin server is aware that the
    storage resource is temporarily unavailable, it is RECOMMENDED that
-   it automatically retry copying the transferred content.  The number
-   of times the server retries, or whether that server retries at all,
-   is at the discretion of the server.
+   it automatically retry copying the uploaded content.  The number of
+   times the server retries, or whether that server retries at all, is
+   at the discretion of the server.
 
-3.6.  Completing the Transfer
+3.6.  Completing the Upload
 
-   To complete a transfer, a client MUST send all the corresponding
-   content ranges.  A client MAY vary the size of each transfer; for
-   example, it may increase or decrease the content range based on
-   available network bandwidth.  A server knows that the transfer is
-   complete when it has received transfers from a client that contain
-   contiguous content ranges up to the size of the total content,
+   To complete an upload, a client MUST send all the corresponding
+   content ranges.  A client MAY vary the size of each upload; for
+   example, it MAY increase or decrease the content range based on
+   available network bandwidth.  A server knows that the upload is
+   complete when it has received uploads from a client that contain all
+   of the contiguous content ranges up to the size of the total content,
    potentially overlapping.  If the origin server determines no further
    content is expected, then it MUST respond with 201 (Created) and
    Content-Location.  Content-Location indicates the URL where the
-   client can retrieve the resource with a GET request, which MAY not
+   client MAY retrieve the resource with a GET request, which MAY not
    previously be known to the client.
 
    A server SHOULD NOT be stateful.  A server, however, MAY choose to
@@ -426,12 +434,12 @@ Table of Contents
    external storage such as a file or database.  The exact mechanism
    used to implement this behavior is at the discretion of the server.
    Once the server has made the decision that all of the content has
-   been transferred, it MAY allow access to the resource via the GET
-   method that is indicated in Content-Location.
+   been uploaded, it MAY allow access to the resource via the GET method
+   that is indicated in Content-Location.
 
 3.7.  Example
 
-   Here is an example of a PATCH request which transfers part of an
+   Here is an example of a PATCH request which uploads part of an
    upload:
 
    Content-Type: application/octet-stream
@@ -442,23 +450,23 @@ Table of Contents
 
    …<message body>…
 
-4.  Cancel Partial Content Transfer
+4.  Cancel Partial Content Upload
 
-   The DELETE method MUST be used to cancel a partial content transfer.
-   When a client requests that a partial content transfer be canceled,
-   the server MUST deallocate the storage previously provisioned for the
-   transfer.
+   The DELETE method MUST be used to cancel a partial content upload.
+   When a client requests that a partial content upload be canceled, the
+   server MUST deallocate the storage previously provisioned for the
+   upload.
 
-   Only the client originator MAY cancel the content transfer.  The same
-   client or a new client MAY begin a new partial content transfer
-   before the existing transfer is complete.  Starting a new partial
-   content transfer intrinsically cancels any existing transfer.
+   Only the client originator MAY cancel the content upload.  The same
+   client or a new client MAY begin a new partial content upload before
+   the existing upload is complete.  Starting a new partial content
+   upload intrinsically cancels any existing upload.
 
 4.1.  If-Match Header Field
 
    If-Match is a REQUIRED header field.  The If-Match header field MUST
    contain the entity tag returned by the origin server when the partial
-   content transfer was started.  If a client does not specify the If-
+   content upload was started.  If a client does not specify the If-
    Match header field, the server MUST respond with 428 (Precondition
    Required).  If the entity tag specified by the client does not match
    the value known to the server, the server MUST respond with 412
@@ -467,25 +475,118 @@ Table of Contents
 4.2.  Resource Contention
 
    It is possible that multiple clients MAY request that an origin
-   server cancel a partial content transfer for the same resource.  If
-   the server is unable to fulfill the request because the resource is
+   server cancel a partial content upload for the same resource.  If the
+   server is unable to fulfill the request because the resource is
    inaccessible, it MUST respond with 409 (Conflict).  Since the request
    MUST be idempotent, a client MAY retry a 409 error response.  A
    server MAY also return the Retry-After header field as defined in
    Section 10.2.3 of [RFC9110] to provide a hint to the client as to how
-   long it should wait before retrying the request.
+   long it SHOULD wait before retrying the request.
 
    If the server is unable to fulfill the request because the allocated
    storage for the resource no longer exists, the server MUST respond
-   with 204 (No Content) because the transfer has already been canceled.
+   with 204 (No Content) because the upload has already been canceled.
 
 4.3.  Example
 
-   Here is an example of canceling a transfer:
+   Here is an example of canceling an upload:
 
    If-Match: "sz8L2qGcV0SHqg8rXwALVQ=="
 
-5.  Security Considerations
+5.  Get Partial Content Upload Metadata
+
+   There are situations where a client does not have the necessary
+   information to continue uploading content.  A few of these scenarios
+   include a client losing network connectivity, pausing or suspending
+   uploads, and resuming or retrying an upload where the previously
+   uploaded content ranges were not persisted by the client.  These
+   scenarios MAY lead a client to request from the destination origin
+   server what information has been already uploaded to it.
+
+   The HEAD method MUST be used to request the metadata about a partial
+   content upload.  If the partial content upload metadata is
+   successfully retrieved, the server MUST respond with 204 (No
+   Content).  If the server is unable to fulfill the request because the
+   resource no longer exists and the server was previously aware of the
+   resource, the server SHOULD respond with 410 (Gone).  The origin
+   server MUST, otherwise, respond with 404 (Not Found) for any resource
+   that does not exist.
+
+5.1.  Allow-Length Header Field
+
+   Allow-Length is an OPTIONAL response header field.  It informs the
+   client what the current content size limit is for any partial upload,
+   which MAY be different from the limit reported in any previous
+   response.  It is RECOMMENDED that an origin server return the Allow-
+   Length header field with an appropriate value, even when a limit had
+   not been previously set.
+
+5.2.  Content-Length Header Field
+
+   Content-Length is a REQUIRED response header field.  The Content-
+   Length value MUST correspond to the size parameter specified in the
+   original Content-Disposition header field when the partial content
+   upload was created.
+
+5.3.  ETag Header Field
+
+   ETag is a REQUIRED response header field.  The ETag value MUST be the
+   same value generated by the server when the partial content upload
+   was created.
+
+5.4.  Last-Modified Header Field
+
+   Last-Modified is an OPTIONAL response header field.  The Last-
+   Modified header field MUST be returned if the modification-date
+   parameter was specified in the original Content-Disposition header
+   field when the partial content upload was created.
+
+5.5.  Sunset Header Field
+
+   Sunset is an OPTIONAL response header field.  If the server imposes a
+   temporal limit on how much time a client has before it considers the
+   upload abandoned, the server MUST return the Sunset header field
+   containing the absolute date and time that will occur.  Any date and
+   time returned by the server SHOULD be the same value returned when
+   the partial content upload was created.
+
+5.6.  Range Header Field
+
+   Range is an OPTIONAL response header field.  The server indicates
+   what content the client has already uploaded by sending the Range
+   header field as defined in Section 14.2 of [RFC9110].  Each range
+   specified MUST use the byte-range unit type as defined by
+   Section 14.1.2 of [RFC9110] with the exception that the first-pos and
+   last-pos values MUST both be specified.  A server MAY chose to emit a
+   Range header field for each byte offset range or collapse them into
+   multiple header field values.  A server MAY also merge overlapping
+   ranges in order to reduce the number of reported range values.
+
+   As an example, if a client previously made 3 partial uploads and with
+   overlapping ranges, the server can emit:
+
+   Range: bytes=0-999999
+   Range: bytes=900000-1999999
+   Range: bytes=2000000-2999999
+
+   Or:
+
+   Range: bytes=0-2999999
+
+5.7.  Example
+
+   Here is an example of a response to a HEAD request which reports the
+   metadata for a partial content upload that is in progress:
+
+   Allow-Length: 10000000
+   Content-Length: 4294967296
+   ETag: "sz8L2qGcV0SHqg8rXwALVQ=="
+   Last-Modified: Sun, 5 Nov 2023 00:00:00 GMT
+   Range: bytes=0-9999999, 10000000-19999999
+   Range: bytes=20000000-49999999
+   Sunset: Mon, 13 Nov 2023 00:00:00 GMT
+
+6.  Security Considerations
 
    This document has the same security considerations that are outlined
    in Section 5 of [RFC2183] and Section 7 of [RFC6266].  There are
@@ -503,9 +604,9 @@ Table of Contents
    would be in addition to transport-level security, client
    authentication, and client authorization.
 
-6.  IANA Considerations
+7.  IANA Considerations
 
-6.1.  The Create Disposition Type
+7.1.  The Create Disposition Type
 
    This document registers a new "disposition-type" value for the
    Content-Disposition header: create.  The definition and usage of this
@@ -519,9 +620,9 @@ Table of Contents
    "modification-date", and "read-date" are OPTIONAL.  Any other
    parameters are unused and SHOULD be ignored.
 
-6.2.  The Allow-Length Response Header Field
+7.2.  The Allow-Length Response Header Field
 
-   This document request that the Allow-Length response header field be
+   This document requests that the Allow-Length response header field be
    added to the "Permanent Message Header Field Names" registry (see
    [RFC3864]), taking into account the guidelines given by [RFC9110].
 
@@ -533,9 +634,9 @@ Table of Contents
 
    Author/Change controller: IETF
 
-7.  References
+8.  References
 
-7.1.  Normative References
+8.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -580,7 +681,10 @@ Table of Contents
               DOI 10.17487/RFC9110, June 2022,
               <https://www.rfc-editor.org/rfc/rfc9110>.
 
-7.2.  Informative References
+8.2.  Informative References
+
+   [FETCH]    WHATWG, "Fetch Standard", March 2024,
+              <https://fetch.spec.whatwg.org/>.
 
    [XHR]      van Kesteren, A., "XMLHttpRequest, Living Standard",
               September 2023, <https://xhr.spec.whatwg.org/>.
@@ -589,15 +693,16 @@ Appendix A.  Content-Disposition Versus Content-Length
 
    The Content-Length header field defined in Section 8.6 of [RFC9110]
    is the most appropriate header field to indicate the size of the
-   intended content being transferred.  As Section 8 of [RFC9110]
+   intended content being uploaded.  As Section 8 of [RFC9110]
    indicates, a "representation" can be anything.  In this document, the
-   "representation" would be the allocated storage for the content
-   transfer, such as a file.
+   "representation" would be the allocated storage for the content to be
+   uploaded, such as a file.
 
    The client scripting engines of modern browsers use the
-   XMLHttpRequest (XHR) API.  Section 4.5.2 of the [XHR] specification
-   clearly indicates that the Content-Length header is restricted and
-   may only be set by the browser.  The inability to set the Content-
+   XMLHttpRequest (XHR) API and Fetch Standard.  Section 4.5.2 in the
+   [XHR] specification and Section 2.2.2 in the [FETCH] specification
+   both state that the Content-Length header is restricted and is only
+   allowed to be set by the browser.  The inability to set the Content-
    Length header without a body makes it an unusable header field as it
    relates to this document.
 
