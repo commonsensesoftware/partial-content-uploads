@@ -5,16 +5,14 @@ stand_alone: true
 
 title: "Partial Content Uploads in HTTP"
 abbrev: "Partial Content Uploads"
-docname: draft-ietf-partial-content-uploads-latest
-category: info
+docname: draft-martinez-partial-content-uploads-latest
+category: std
 ipr: trust200902
 submissiontype: IETF
 number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
 keyword:
  - partial
  - upload
@@ -32,7 +30,7 @@ author:
 normative:
     RFC9110:
     RFC8594:
-    RFC7807:
+    RFC9457:
     RFC6266:
     RFC5234:
     RFC3864:
@@ -86,7 +84,7 @@ This specification uses the Augmented Backus-Naur Form (ABNF) notation of {{!RFC
 
 The POST method MUST be used to indicate that the client intends to start a new partial content upload. The client MUST send the Content-Disposition header field defined in {{!RFC6266}} to indicate how the origin server is expected process the content. This will provide enough information for the origin server to allocate the requested storage space before any content is uploaded. This behavior ensures that the origin server has enough storage space and the client is authorized to upload the content.
 
-If the origin server successfully allocates the necessary storage, it MUST respond with 201 (Created), including a Location and ETag header field. A server MAY elect to return the Allow-Length header field, which indicates the maximum allowed length of any subsequent partial content. If an origin server refuses to allocate the requested storage (ex: due to policy limit), it MUST respond with 422 (Unprocessable Content). It is RECOMMENDED that such a response include problem details as defined in {{!RFC7807}} which explains why the content cannot be allocated. When an origin server fails to allocate storage for the resource, then it MUST respond with 507 (Insufficient Storage). If the client is not authorized to create the requested resource, the origin server MUST respond with 401 (Unauthorized) if authentication is possible; otherwise, it MUST respond with 403 (Forbidden).
+If the origin server successfully allocates the necessary storage, it MUST respond with 201 (Created), including a Location and ETag header field. A server MAY elect to return the Allow-Length header field, which indicates the maximum allowed length of any subsequent partial content. If an origin server refuses to allocate the requested storage (ex: due to policy limit), it MUST respond with 422 (Unprocessable Content). It is RECOMMENDED that such a response include problem details as defined in {{!RFC9457}} which explains why the content cannot be allocated. When an origin server fails to allocate storage for the resource, then it MUST respond with 507 (Insufficient Storage). If the client is not authorized to create the requested resource, the origin server MUST respond with 401 (Unauthorized) if authentication is possible; otherwise, it MUST respond with 403 (Forbidden).
 
 There is no temporal specification as to how long a client is allowed take to upload all the content ranges. A server MAY choose to implicitly cancel an upload it deems abandoned due to inactivity after an arbitrary period or after an absolute amount of time has passed. It is RECOMMENDED that an origin server which knows when the upload will be considered canceled return the Sunset header as defined in {{!RFC8594}}, which indicates the cancellation date and time. {{cancel-upload}} describes how an upload is explicitly canceled.
 
@@ -106,7 +104,7 @@ client's expectation that the disposition of the origin server is to create a re
 The size parameter is REQUIRED and has the same meaning as defined in Section 2.7 of {{!RFC2183}}. The origin server MUST use this value as the amount of storage to allocate in octets.
 
 If a client does not provide the size parameter or the size is equal to or less than zero, the origin server MUST respond with 411 (Length Required). If the origin server refuses to allocate the requested storage, it MUST
-respond with 422 (Unprocessable Content). It is RECOMMENDED that such a response include problem details as defined in {{!RFC7807}} which explains why the content cannot be allocated and includes the maximum allowable size. For example,
+respond with 422 (Unprocessable Content). It is RECOMMENDED that such a response include problem details as defined in {{!RFC9457}} which explains why the content cannot be allocated and includes the maximum allowable size. For example,
 if the requested size is too large, the server MAY respond with:
 
 ~~~~ http
@@ -229,7 +227,7 @@ Content-Range: bytes 0-104857600/4294967296
 If-Match: "sz8L2qGcV0SHqg8rXwALVQ=="
 Expect: 100-continue
 
-…<message body>…
+...<message body>...
 ~~~~
 
 # Cancel Partial Content Upload {#cancel-upload}
@@ -342,7 +340,7 @@ Header Field Name: Allow-Length
 
 Protocol: http
 
-Status: informational
+Status: standard
 
 Author/Change controller: IETF
 

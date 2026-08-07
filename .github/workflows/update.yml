@@ -15,7 +15,7 @@ name: "Update Generated Files"
 #  - changed the title of drafts
 #
 # Note that this removes any customizations you have made to
-# the affected files.
+# the affected files, including UPLOAD_EMAIL in the Makefile.
 on: workflow_dispatch
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
         contents: write
     steps:
     - name: "Checkout"
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
 
     - name: "Update Generated Files"
       uses: martinthomson/i-d-template@v1
